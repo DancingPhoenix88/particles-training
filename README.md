@@ -1,6 +1,7 @@
 # particles-training
 
 Insprired by [[Visual Effects with Particles]](https://learn.unity.com/tutorial/5c5151b8edbc2a0020694df5#) course.
+![https://connect-prd-cdn.unity.com/20190307/p/images/4715be5c-22d3-4be4-b354-3ccc837e683d.2000x0x1.webp](https://connect-prd-cdn.unity.com/20190307/p/images/4715be5c-22d3-4be4-b354-3ccc837e683d.2000x0x1.webp)
 
 ## Table of Content
 1. Overview
