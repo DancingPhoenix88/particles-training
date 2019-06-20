@@ -13,6 +13,8 @@ Insprired by [[Visual Effects with Particles]](https://learn.unity.com/tutorial/
 7. Waterfall effect
 8. Sub Emitters module
 9. Rate over Distance
+10. Custom Vertex Stream
+11. Where to go next
 
 
 ## 1. Overview
@@ -308,3 +310,52 @@ This is a special mode of `Emission` module. If this parameter has value > 0, it
 So, if the object moves fast, a lot of particles will be emitted. If it moves slowly, less particles will be emitted. If it stops, no new particles are emitted. It is a convenient way to control the number of particles without coding.
 
 Trail is useful for moving objects / particles, but the trails are attached to their parents. Let's take a look at the Rocket Trail VFX (#20/22), the smoke particle are emitted along the way the rocket moves. And not like trails, the smoke particles flying up from where they are emitted, they don't follow the rocket.
+
+This emission mode is useful for visual effects involving motion, examples: - Smoke of Rocket (#20/22)
+- Dust while character is running
+- Dust while car is moving
+
+
+## 10. Custom Vertex Stream
+Particle system is great, but the ultimate tool to create beautiful visual effects is shader, which is harder to understand. 
+
+Sometimes, you might need shader's help to control the particles. And you do that by sharing particles data to their shader. You define which attributes will be sent to shader before rendering in property `Custom Vertex Stream`, module `Renderer`.
+
+Let's say we have a "Dissolve" shader `(Assets/Shaders/Custom/Dissolve.shader)`, to make object disappear in style. We could burn a dollar bill with this shader by controlling the custom `Burn Rate` parameter in Material.
+
+**Target**: Let's burn thousands of dollar bills !
+
+1. Create gameobject `VFX_MoneyFountain` with Particle System
+2. Adjust your parameters to:
+	1. Emit many dollar bills upward, then fall down using `Gravity Modifier` & `Velocity over Lifetime`
+	2. Dollar bills have same size
+	3. Use `Stretched Billboard` to align the bills with moving direction
+
+That's it. We now have a money fountain. Let's burn the emitted dollar bills.
+
+1. Clone `VFX_MoneyFountain` to `VFX_MoneyFountain_Burn`
+2. Clone shader `Custom/Dissolve` to `Particles/Dissolve` and its material, so we can control the `Burn Rate` parameter from Particle System
+3. In module `Renderer`, enable parameter `Custom Vertex Stream` to send particle parameters to shader
+4. Remove `Color` part in `Custom Vertex Stream` since we're not using it
+5. We want to burn the dollar bill from the moment it is emitted, and finish burning it when it dies. It means the `Burn Rate` parameter of the shader is equal to lifetime of each particle. Add `AgePercent` to `Custom Vertex Stream`. Notice that this is just a number (float, [0-1]), so it's decoded in 'z' component of TEXCOORD
+6. Edit the shader to use TEXCOORD.z as `Burn Rate`. You might need to add vertex function to carry the TEXCOORD.z from Vertex Stream to surface function. See detailed implementation in the shader code.
+
+Let's simulate the particle system. 
+**And now we have a money fountain, which emits burning dollar bills.**
+Notice that particles with different lifetime having different burning rate. It's awesome. Now you understand how we use `Custom Vertex Stream` to send data from `Particle System` to shader.
+
+I keep going further by making dollar bills waving like flags in the wind while burning. But a quad with just 4 vertices won't help, so I need to use `Plane` as a Mesh in Renderer of the Particle System. You can see the details in gameobject `VFX_MoneyFountain_Burn_Waving`. And guess what, I use AgePercent from Particle Sytem to control how vertices are displaced too.
+
+## 11. Where to go next
+**Particle System** is a classic method to create beautiful visual effects in Unity. By mastering it, you could create many useful effects helping your game to stand out.
+
+Unity is doing experiments on new tool called [**Visual Effect Graph**](https://www.youtube.com/watch?v=SUZzJcBIK80), which has similar concept with Particle System, and we have more control on parameters, with node-based UI.
+
+And you saw how powerful **shader** is in this training course. By using shader, you could create *ANY* visual effects, which Particle System could not. Shader is the true king in Computer Graphics, especially in game development. At first, it might be tough for you to start, so you should learn from the other great developers out there, to know the keywords (dissolve, triplanar, tesselation ...), then how they did it later.
+
+If you're not comfortable with coding shader, you could use [**Shader Graph**](https://unity.com/shader-graph). It is a node-based system to quickly build and preview your shader in real-time. When you're done editing, you still need to compile it to a real shader code, and it's super easy.
+
+Visual Effect in Game Development is a huge topic, and Particle System is a good start. Hope this helps.
+
+___
+**THE END**
