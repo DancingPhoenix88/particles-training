@@ -346,14 +346,30 @@ Notice that particles with different lifetime having different burning rate. It'
 
 I keep going further by making dollar bills waving like flags in the wind while burning. But a quad with just 4 vertices won't help, so I need to use `Plane` as a Mesh in Renderer of the Particle System. You can see the details in gameobject `VFX_MoneyFountain_Burn_Waving`. And guess what, I use AgePercent from Particle Sytem to control how vertices are displaced too.
 
+There are some effects in the sample using `Custom Vertex Stream` to send particle color to shader to tint with texture color:
+
+- **Big Explosion (#1/22)**: Dark smoke
+- **Small Explosion (#2/22)**: Dark smoke
+- **Storm Clouds (#11/22)**: Clouds
+
 ## 11. Where to go next
-**Particle System** is a classic method to create beautiful visual effects in Unity. By mastering it, you could create many useful effects helping your game to stand out.
+**Particle System** is a classic method to create beautiful visual effects in Unity. By mastering it, you could create many useful effects helping your game to stand out. You might want to explore more about:
+
+- Optimization by reducing number of particle systems, modules, particles
+- Optimization by using simple meshes, fake light
+- Optimization by using packed texture & Texture Sheet Animation module
+- Optimization by re-ordering particle system for batch drawing
+- Optimization by using shaders for Mobile
+- Sorting order when using particle system with UI
+- Capturing particle effect to texture (real-time or baked)
+
+~
 
 Unity is doing experiments on new tool called [**Visual Effect Graph**](https://www.youtube.com/watch?v=SUZzJcBIK80), which has similar concept with Particle System, and we have more control on parameters, with node-based UI.
 
-And you saw how powerful **shader** is in this training course. By using shader, you could create *ANY* visual effects, which Particle System could not. Shader is the true king in Computer Graphics, especially in game development. At first, it might be tough for you to start, so you should learn from the other great developers out there, to know the keywords (dissolve, triplanar, tesselation ...), then how they did it later.
+I think you saw how powerful **shader** is in this training course. By using shader, you could create *ANY* visual effects, which Particle System could not or not as efficiently. Shader is the true king in Computer Graphics, especially in game development. At first, it might be tough for you to start, so you should learn from the other great developers out there, to know the keywords (dissolve, triplanar, tesselation ...), then how they did it later. All the smoke & cloud effects in the sample use Normal Map to add depth to the objects.
 
-If you're not comfortable with coding shader, you could use [**Shader Graph**](https://unity.com/shader-graph). It is a node-based system to quickly build and preview your shader in real-time. When you're done editing, you still need to compile it to a real shader code, and it's super easy.
+If you're not comfortable with coding shader, you could use [**Shader Graph**](https://unity.com/shader-graph). It is a node-based system to quickly build and preview your shader in real-time. When you're done editing, you still need to compile it to a real shader code, via a button.
 
 Visual Effect in Game Development is a huge topic, and Particle System is a good start. Hope this helps.
 
