@@ -66,6 +66,7 @@ Before we begin, install `Unity Particle Pack 5.x` above and open scene `Menu` t
 - Noise
 
 After this part, you could produce some VFXs:
+
 - Smoke
 - Flare
 - Rain drops
@@ -84,7 +85,7 @@ After this part, you could produce some VFXs:
 6. Use module `Color over Lifetime` to make fire fade in and fade out like what we did in Ember VFX
 7. The animation looks not so smooth it's too slow -> let's change `cycle = 2` in module Texture Sheet Animation
 8. Check `Prewarm` in main module to make fire particles skip 1 emission loop -> full fire shape right away instead of growing from a small to a big fire
-9. Use module Noise to add randomness to the movement of fire particles (X=going up, Y=going up, Z=0). Note: When you click in the curve, it will be togged between colored and greyout, they are just toggle to display the curve in the Particle System curve window, not toggle them on or off.
+9. Use module Noise to add randomness to the movement of fire particles (X=going up, Y=going up, Z=0). Note: When you click in the curve, it will be toggled between colored and greyout, they are just toggle to display the curve in the Particle System curve window, not toggle them on or off.
 10. Particles are too far away -> set `Start Size = 2`
 11. In order to make the fire smaller in the top, just need to use `Size over Lifetime` module with the curve going down
 12. (Optional) You can create a particle system which emits only 1 particle to mimic the light on the ground. You may need to set `Render Mode = Horizontal Billboard` to make the light aligned with the ground.
