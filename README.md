@@ -1,26 +1,27 @@
 # particles-training
 
 Insprired by [[Visual Effects with Particles]](https://learn.unity.com/tutorial/5c5151b8edbc2a0020694df5#) course.
-![https://connect-prd-cdn.unity.com/20190307/p/images/4715be5c-22d3-4be4-b354-3ccc837e683d.2000x0x1.webp](https://connect-prd-cdn.unity.com/20190307/p/images/4715be5c-22d3-4be4-b354-3ccc837e683d.2000x0x1.webp)
+![Unity Particle Pack 5.x screenshot](https://connect-prd-cdn.unity.com/20190307/p/images/4715be5c-22d3-4be4-b354-3ccc837e683d.2000x0x1.webp)
 
 ## Table of Content
-1. Overview
-2. Basic modules
-3. Texture Sheet Animation module
-4. Fire-related effects
-5. Bullet holes & hit effects
-6. Trail module
-7. Waterfall effect
-8. Sub Emitters module
-9. Rate over Distance
-10. Custom Vertex Stream
-11. Where to go next
+1. [Overview](https://github.com/DancingPhoenix88/particles-training#1-overview)
+2. [Basic modules](https://github.com/DancingPhoenix88/particles-training#2-basic-modules)
+3. [Texture Sheet Animation module](https://github.com/DancingPhoenix88/particles-training#3-texture-sheet-animation-module)
+4. [Fire-related effects](https://github.com/DancingPhoenix88/particles-training#4-fire-related-effects)
+5. [Bullet holes & hit effects](https://github.com/DancingPhoenix88/particles-training#5-bullet-holes--hit-effects)
+6. [Trail module](https://github.com/DancingPhoenix88/particles-training#6-trail-module)
+7. [Waterfall effect](https://github.com/DancingPhoenix88/particles-training#7-waterfall-effect)
+8. [Sub Emitters module](https://github.com/DancingPhoenix88/particles-training#8-sub-emitters-module)
+9. [Rate over Distance](https://github.com/DancingPhoenix88/particles-training#9-rate-over-distance)
+10. [Custom Vertex Stream](https://github.com/DancingPhoenix88/particles-training#10-custom-vertex-stream)
+11. [Where to go next](https://github.com/DancingPhoenix88/particles-training#11-where-to-go-next)
 
 
 ## 1. Overview
 ### Short introduction:
 - Particle System is essential to create beautiful visual effects (VFXs)
 - Particle System can simulate fluid, liquid materials like fire, water, smoke ... efficiently
+- Unity's Particle System is called **Shuriken**
 
 
 ### Goals:
@@ -65,6 +66,12 @@ Before we begin, install `Unity Particle Pack 5.x` above and open scene `Menu` t
 - Renderer (Billboard, Stretched Billboard, Material)
 - Noise
 
+**Screenshots:**
+
+![VFX Ember](/Images/vfx_ember.jpg?raw=true "VFX Ember")
+
+![VFX Ember Configs](/Images/vfx_ember_configs.jpg?raw=true "VFX Ember Configs")
+
 After this part, you could produce some VFXs:
 
 - Smoke
@@ -81,11 +88,11 @@ After this part, you could produce some VFXs:
 2. In module Renderer, select `Material = FlameRoundYellowParticle`. It's shader is simple (Mobile/Particles/Additive), and it's texture is a spritesheet of 50 sprites (total size: 2048x2048). At this moment, each particle is an entire spritesheet
 3. In module Texture Sheet Animation, set `Tiles = 10x5 (columns x rows)`, now each particle is just a frame in spritesheet.
 4. We need to rotate Shape -90 along X axis to mimic realworld flame -> adjust to Shape = Circle
-5. Particles are spreadng but they stay on the ground -> enable module `Velocity over Lifetime` to make Y going up to make particles flying. Note: Because we rotated the shape, then Y axis is rotated too -> need to use Y axis of World Space
+5. Particles are spreading but they stay on the ground -> enable module `Velocity over Lifetime` to make Y increase over time leading to particles flying up. Note: Because we rotated the shape, then Y axis is rotated too -> need to use Y axis of World Space
 6. Use module `Color over Lifetime` to make fire fade in and fade out like what we did in Ember VFX
-7. The animation looks not so smooth it's too slow -> let's change `cycle = 2` in module Texture Sheet Animation
+7. The animation looks not so smooth, it's too slow -> let's change `cycle = 2` in module Texture Sheet Animation
 8. Check `Prewarm` in main module to make fire particles skip 1 emission loop -> full fire shape right away instead of growing from a small to a big fire
-9. Use module Noise to add randomness to the movement of fire particles (X=going up, Y=going up, Z=0). Note: When you click in the curve, it will be toggled between colored and greyout, they are just toggle to display the curve in the Particle System curve window, not toggle them on or off.
+9. Use module Noise to add randomness to the movement of fire particles (X=going left/right, Y=going up, Z=0). Note: When you click the curve, it will be switched between colored and greyout, and it affects only the appearance in the curve window, not the actual module.
 10. Particles are too far away -> set `Start Size = 2`
 11. In order to make the fire smaller in the top, just need to use `Size over Lifetime` module with the curve going down
 12. (Optional) You can create a particle system which emits only 1 particle to mimic the light on the ground. You may need to set `Render Mode = Horizontal Billboard` to make the light aligned with the ground.
@@ -100,7 +107,14 @@ After this part, you could produce some VFXs:
 - Noise (Separate Axis)
 - Renderer (Horizontal Billboard)
 
+**Screenshots:**
+
+![VFX Fire](/Images/vfx_fire.jpg?raw=true "VFX Fire")
+
+![VFX Fire Configs](/Images/vfx_fire_configs.jpg?raw=true "VFX Fire Configs")
+
 After this part, you could produce some other VFXs:
+
 - Fire with smoke
 - Lightning
 - Wind
@@ -116,7 +130,7 @@ Since we're familiar with many modules, let's try to break down some VFXs to see
   - `Emission`: Low rate over time
   - `Main`: Zero start speed, simulation space = World to keep the fire in place when moving the torch
   - `Renderer & Texture Sheet Animation modules`: same as our Fire VFX
-  - **[NEW]** `Inherit Velocity`: Make newly emitted particles stick to the GameObject for a short time, when its moving quickly
+  - **[NEW]** `Inherit Velocity`: Make newly emitted particles inherit velocity of the source GameObject (then particle velocity become relative)
 - **Flame thrower (#5/22)**: 
   - `Shape`: Cone with small radius
   - `Emission`: High rate over time
@@ -124,7 +138,7 @@ Since we're familiar with many modules, let's try to break down some VFXs to see
   - `Color over Lifetime`: Fade out with orange color
   - `Size over Lifetime`: Scale up
   - `Renderer & Texture Sheet Animation modules`: same as our Fire VFX
-  - Inherit Velocity`: Make newly emitted particles stick to the GameObject for a short time, when its moving quickly
+  - **[NEW]** `Inherit Velocity`: Make newly emitted particles inherit relative velocity of the source GameObject (then particle velocity become relative)
   - **[NEW]** `Collision`: Let the fire particles change the direction when colliding with the floor (having collider)
 
 
@@ -146,7 +160,7 @@ Next, we will create a bullet hole on the wall. This can be achieved by 1-partic
 
 1. Create a new GameObject, parented to above hit effect
 2. Add component `Mesh Renderer` & `Mesh Filter` to use Quad mesh and material `BulletDecalStone`
-3. You may not see the bullet hole, becaue it's facing to the inner side of the wall -> rotate it 180 degrees
+3. You may not see the bullet hole, because it's facing to the inner side of the wall -> rotate it 180 degrees
 
 **Now we have Hit VFX with a bullet hole, and getting familiar with some other features:**
 
@@ -158,6 +172,12 @@ Next, we will create a bullet hole on the wall. This can be achieved by 1-partic
    - Rotate the hit effect to match the surface the bullet hits (the bullet hole will be rotated along)
    - Auto destroy hit effect after an amount of time (the bullet hole will be destroyed too)
    - The bullet hole is drawn by a simple sprite, which will look fake on the edge of the wall (part of it will be out of the wall). This could be fixed by using a Decal, not a Mesh Renderer
+
+**Screenshots:**
+
+![VFX Bullet Hole](/Images/vfx_bullet_hole.jpg?raw=true "VFX Bullet Hole")
+
+![VFX Bullet Hole Configs](/Images/vfx_bullet_hole_configs.jpg?raw=true "VFX Bullet Hole Configs")
 
 You could see other VFXs (#14-#18 / 22) to see how they make different hit effects to different materials:
 
@@ -200,6 +220,13 @@ In the real world, the sparks are just tiny hot particles flying in the air, and
 - Render (RenderMode=None)
 - Collision (Planes, Bounce)
 - Question: What if I just want my particles to collider with some surfaces, not all of them ? _(hint: Layer)_
+
+
+**Screenshots:**
+
+![VFX Electrical Sparks](/Images/vfx_electrical_sparks.jpg?raw=true "VFX Electrical Sparks")
+
+![VFX Electrical Sparks Configs](/Images/vfx_electrical_sparks_configs.jpg?raw=true "VFX Electrical Sparks Configs")
 
 **If you look at the Spark VFX (#8/22), could you tell how it's made ?**
 
@@ -271,6 +298,12 @@ In the real world, the sparks are just tiny hot particles flying in the air, and
 - Shape (Box, Edge)
 - Renderer (Horizontal Billboard, Max Size)
 
+**Screenshots:**
+
+![VFX Waterfall](/Images/vfx_waterfall.jpg?raw=true "VFX Waterfall")
+
+![VFX Waterfall Configs](/Images/vfx_waterfall_configs.jpg?raw=true "VFX Waterfall Configs")
+
 ## 8. Sub Emitters module
 
 If you take a look at the water drip VFX (#12/22), could you re-create it ?
@@ -304,6 +337,12 @@ If you take a look at the water drip VFX (#12/22), could you re-create it ?
 
 **Now we have beautiful Rain VFX, and getting familiar with `Sub Emitters` module**
 
+**Screenshots:**
+
+![VFX Rain](/Images/vfx_rain.jpg?raw=true "VFX Rain")
+
+![VFX Rain Configs](/Images/vfx_rain_configs.jpg?raw=true "VFX Rain Configs")
+
 
 ## 9. Rate over Distance
 This is a special mode of `Emission` module. If this parameter has value > 0, it will emit new particles based on the distance it's parent traveled.
@@ -312,9 +351,11 @@ So, if the object moves fast, a lot of particles will be emitted. If it moves sl
 
 Trail is useful for moving objects / particles, but the trails are attached to their parents. Let's take a look at the Rocket Trail VFX (#20/22), the smoke particle are emitted along the way the rocket moves. And not like trails, the smoke particles flying up from where they are emitted, they don't follow the rocket.
 
-This emission mode is useful for visual effects involving motion, examples: - Smoke of Rocket (#20/22)
-- Dust while character is running
-- Dust while car is moving
+This emission mode is useful for visual effects involving motion, examples: 
+
+* Smoke of Rocket (#20/22)
+* Dust while character is running
+* Dust while car is moving
 
 
 ## 10. Custom Vertex Stream
@@ -347,6 +388,13 @@ Notice that particles with different lifetime having different burning rate. It'
 
 I keep going further by making dollar bills waving like flags in the wind while burning. But a quad with just 4 vertices won't help, so I need to use `Plane` as a Mesh in Renderer of the Particle System. You can see the details in gameobject `VFX_MoneyFountain_Burn_Waving`. And guess what, I use AgePercent from Particle Sytem to control how vertices are displaced too.
 
+
+**Screenshots:**
+
+![VFX Money Fountain](/Images/vfx_money_fountain.jpg?raw=true "VFX Money Fountain")
+
+![VFX Money Fountain Configs](/Images/vfx_money_fountain_configs.jpg?raw=true "VFX Money Fountain Configs")
+
 There are some effects in the sample using `Custom Vertex Stream` to send particle color to shader to tint with texture color:
 
 - **Big Explosion (#1/22)**: Dark smoke
@@ -363,6 +411,11 @@ There are some effects in the sample using `Custom Vertex Stream` to send partic
 - Optimization by using shaders for Mobile
 - Sorting order when using particle system with UI
 - Capturing particle effect to texture (real-time or baked)
+- Point Cache, Vector Field, Signed Distance Function, Texture 3D
+- Conformation
+- Force field
+- Push / Pull force
+- Dynamic target ...
 
 ~
 
@@ -376,3 +429,5 @@ Visual Effect in Game Development is a huge topic, and Particle System is a good
 
 ___
 **THE END**
+
+2018
